@@ -1,6 +1,7 @@
 import Video from "../models/Video.js";
 import "../models/User.js";
 import "../models/Category.js";
+import { processVideo } from "../services/videoProcessor.js";
 
 // POST /api/videos/upload
 export const uploadVideo = async (req, res) => {
@@ -35,7 +36,8 @@ export const uploadVideo = async (req, res) => {
       sensitivityStatus: "pending",
     });
 
-    // TODO: Phase 6 — trigger video processing pipeline here
+    // Trigger processing pipeline (runs in background, doesn't block response)
+    processVideo(video._id, req.user._id.toString());
 
     res.status(201).json({
       success: true,
