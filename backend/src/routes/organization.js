@@ -1,14 +1,11 @@
 import { Router } from 'express';
+import { createOrganization, joinOrganization, getMyOrganization } from '../controllers/organizationController.js';
+import { protect } from '../middleware/auth.js';
 
 const router = Router();
 
-// Placeholder - will be implemented in Phase 3
-router.post('/create', (req, res) => {
-  res.json({ message: 'Create organization endpoint' });
-});
-
-router.post('/join', (req, res) => {
-  res.json({ message: 'Join organization endpoint' });
-});
+router.post('/create', protect, createOrganization);
+router.post('/join', protect, joinOrganization);
+router.get('/me', protect, getMyOrganization);
 
 export default router;
