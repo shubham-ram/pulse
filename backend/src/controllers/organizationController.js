@@ -142,3 +142,128 @@ export const getMyOrganization = async (req, res) => {
     });
   }
 };
+
+// GET /api/organizations/members — list all members (admin only)
+export const getMembers = async (req, res) => {
+  try {
+    const members = await User.find({
+      organizationId: req.user.organizationId,
+      status: 'active',
+    }).select('name email role createdAt');
+
+    res.status(200).json({
+      success: true,
+      data: { members },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// PUT /api/organizations/members/:id/role — change a member's role (admin only)
+export const updateMemberRole = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    if (!role || !['admin', 'editor', 'viewer'].includes(role)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please provide a valid role (admin, editor, viewer)',
+      });
+    }
+
+    // Can't change your own role
+    if (id === req.user._id.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: 'You cannot change your own role',
+      });
+    }
+
+    const member = await User.findOne({
+      _id: id,
+      organizationId: req.user.organizationId,
+      status: 'active',
+    });
+
+    if (!member) {
+      return res.status(404).json({
+        success: false,
+        message: 'Member not found in your organization',
+      });
+    }
+
+    member.role = role;
+    await member.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Member role updated to '${role}'`,
+      data: {
+        member: {
+          _id: member._id,
+          name: member.name,
+          email: member.email,
+          role: member.role,
+        },
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// DELETE /api/organizations/members/:id — remove a member (admin only)
+export const removeMember = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Can't remove yourself
+    if (id === req.user._id.toString()) {
+      return res.status(400).json({
+        success: false,
+        message: 'You cannot remove yourself from the organization',
+      });
+    }
+
+    const member = await User.findOne({
+      _id: id,
+      organizationId: req.user.organizationId,
+      status: 'active',
+    });
+
+    if (!member) {
+      return res.status(404).json({
+        success: false,
+        message: 'Member not found in your organization',
+      });
+    }
+
+    // Remove org and role from user
+    member.organizationId = null;
+    member.role = null;
+    await member.save();
+
+    // Remove from org's memberIds
+    await Organization.findByIdAndUpdate(req.user.organizationId, {
+      $pull: { memberIds: member._id },
+    });
+
+    res.status(200).json({
+      success: true,
+      message: 'Member removed from organization',
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
