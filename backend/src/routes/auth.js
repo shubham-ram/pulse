@@ -1,13 +1,11 @@
-const express = require('express');
-const router = express.Router();
+import { Router } from 'express';
+import { register, login, getMe } from '../controllers/authController.js';
+import { protect } from '../middleware/auth.js';
 
-// Placeholder - will be implemented in Phase 2
-router.post('/register', (req, res) => {
-  res.json({ message: 'Register endpoint' });
-});
+const router = Router();
 
-router.post('/login', (req, res) => {
-  res.json({ message: 'Login endpoint' });
-});
+router.post('/register', register);
+router.post('/login', login);
+router.get('/me', protect, getMe);
 
-module.exports = router;
+export default router;
