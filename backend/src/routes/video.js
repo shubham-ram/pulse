@@ -1,14 +1,18 @@
 import { Router } from 'express';
+import { uploadVideo, getVideos, getVideoById, deleteVideo } from '../controllers/videoController.js';
+import { protect, authorize } from '../middleware/auth.js';
+import upload from '../config/multer.js';
 
 const router = Router();
 
-// Placeholder - will be implemented in Phase 5
-router.post('/upload', (req, res) => {
-  res.json({ message: 'Upload video endpoint' });
-});
+// Editor/Admin can upload
+router.post('/upload', protect, authorize('admin', 'editor'), upload.single('video'), uploadVideo);
 
-router.get('/', (req, res) => {
-  res.json({ message: 'List videos endpoint' });
-});
+// All org members can view
+router.get('/', protect, authorize('admin', 'editor', 'viewer'), getVideos);
+router.get('/:id', protect, authorize('admin', 'editor', 'viewer'), getVideoById);
+
+// Editor (own videos) / Admin (any) can delete
+router.delete('/:id', protect, authorize('admin', 'editor'), deleteVideo);
 
 export default router;
