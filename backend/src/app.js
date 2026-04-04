@@ -1,22 +1,30 @@
-const express = require('express');
-const cors = require('cors');
-const path = require('path');
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import authRoutes from './routes/auth.js';
+import organizationRoutes from './routes/organization.js';
+import videoRoutes from './routes/video.js';
+import categoryRoutes from './routes/category.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded());
 
 // Static files for uploaded videos
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // API Routes
-app.use('/api/auth', require('./routes/auth'));
-app.use('/api/organizations', require('./routes/organization'));
-app.use('/api/videos', require('./routes/video'));
-app.use('/api/categories', require('./routes/category'));
+app.use('/api/auth', authRoutes);
+app.use('/api/organizations', organizationRoutes);
+app.use('/api/videos', videoRoutes);
+app.use('/api/categories', categoryRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -32,4 +40,4 @@ app.use((err, req, res, next) => {
   });
 });
 
-module.exports = app;
+export default app;

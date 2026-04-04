@@ -1,11 +1,4 @@
-const User = require('./User');
-const Organization = require('./Organization');
-const Video = require('./Video');
-const Category = require('./Category');
-
-module.exports = {
-  User,
-  Organization,
-  Video,
-  Category,
-};
+export { default as User } from './User.js';
+export { default as Organization } from './Organization.js';
+export { default as Video } from './Video.js';
+export { default as Category } from './Category.js';

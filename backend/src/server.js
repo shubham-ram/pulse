@@ -1,8 +1,8 @@
-const http = require('http');
-const app = require('./app');
-const config = require('./config');
-const connectDB = require('./config/db');
-const { initSocket } = require('./config/socket');
+import http from 'http';
+import app from './app.js';
+import config from './config/index.js';
+import connectDB from './config/db.js';
+import { initSocket } from './config/socket.js';
 
 const server = http.createServer(app);
 

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const crypto = require('crypto');
+import mongoose from 'mongoose';
+import crypto from 'crypto';
 
 const organizationSchema = new mongoose.Schema(
   {
@@ -41,11 +41,10 @@ const organizationSchema = new mongoose.Schema(
 );
 
 // Generate invite code before saving
-organizationSchema.pre('save', function (next) {
+organizationSchema.pre('save', function () {
   if (!this.inviteCode) {
     this.inviteCode = crypto.randomBytes(4).toString('hex').toUpperCase();
   }
-  next();
 });
 
-module.exports = mongoose.model('Organization', organizationSchema);
+export default mongoose.model('Organization', organizationSchema);

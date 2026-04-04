@@ -2,6 +2,7 @@
   "name": "pulse-backend",
   "version": "1.0.0",
   "description": "Video Upload, Sensitivity Processing, and Streaming Backend",
+  "type": "module",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
