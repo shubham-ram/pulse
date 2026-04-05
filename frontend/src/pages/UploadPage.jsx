@@ -43,12 +43,15 @@ const UploadPage = () => {
   const [processingState, setProcessingState] = useState(null); // null | { stage, progress } | "complete" | "error"
   const [processingResult, setProcessingResult] = useState(null);
 
+  // Track whether we're actively listening for processing events
+  const [listening, setListening] = useState(false);
+
   // Socket listeners for processing progress
   useEffect(() => {
-    if (!processingState || processingState === "complete" || processingState === "error") return;
+    if (!listening) return;
 
     socket.connect();
-    socket.emit("join-room", user._id);
+    socket.emit("join", user._id);
 
     const onProgress = ({ stage, progress }) => {
       setProcessingState({ stage, progress });
@@ -57,11 +60,13 @@ const UploadPage = () => {
     const onComplete = ({ videoId, processingStatus, sensitivityStatus }) => {
       setProcessingState("complete");
       setProcessingResult({ videoId, processingStatus, sensitivityStatus });
+      setListening(false);
       toast.success("Video processing complete!");
     };
 
     const onError = ({ message }) => {
       setProcessingState("error");
+      setListening(false);
       toast.error(message || "Processing failed");
     };
 
@@ -75,7 +80,7 @@ const UploadPage = () => {
       socket.off("processing-error", onError);
       socket.disconnect();
     };
-  }, [processingState, user._id]);
+  }, [listening, user._id]);
 
   const validateFile = useCallback((f) => {
     if (!ACCEPTED_TYPES.includes(f.type)) {
@@ -132,7 +137,8 @@ const UploadPage = () => {
       toast.success("Upload complete — processing started");
       setUploading(false);
       // Start listening for processing events
-      setProcessingState({ stage: "transcoding", progress: 0 });
+      setProcessingState({ stage: "starting", progress: 0 });
+      setListening(true);
     } catch (err) {
       toast.error(err.response?.data?.message || "Upload failed");
       setUploading(false);
