@@ -7,13 +7,13 @@ import ProtectedRoute from "@/components/ProtectedRoute";
 import AppLayout from "@/components/layout/AppLayout";
 
 // Pages
-import LoginPage from "@/pages/LoginPage";
-import RegisterPage from "@/pages/RegisterPage";
-import OrganizationPage from "@/pages/OrganizationPage";
-import DashboardPage from "@/pages/DashboardPage";
-import UploadPage from "@/pages/UploadPage";
-import VideoPlayerPage from "@/pages/VideoPlayerPage";
-import AdminPage from "@/pages/AdminPage";
+import LoginPage from "@/pages/Login";
+import RegisterPage from "@/pages/Register";
+import OrganizationPage from "@/pages/Organization";
+import DashboardPage from "@/pages/Dashboard";
+import UploadPage from "@/pages/Upload";
+import VideoPlayerPage from "@/pages/VideoPlayer";
+import AdminPage from "@/pages/Admin";
 
 function App() {
   return (
