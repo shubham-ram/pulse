@@ -1,8 +1,10 @@
 import ffmpeg from "fluent-ffmpeg";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import Video from "../models/Video.js";
 import { getIO } from "../config/socket.js";
+import { uploadToCloudinary } from "./cloudinaryService.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -125,8 +127,6 @@ export const processVideo = async (videoId, userId) => {
       userId
     );
 
-    video.streamUrl = `/uploads/processed/${outputFileName}`;
-
     // Step 2: Extract duration
     const duration = await getVideoDuration(outputPath);
     video.duration = Math.round(duration);
@@ -136,12 +136,35 @@ export const processVideo = async (videoId, userId) => {
       progress: 100,
     });
 
-    // Step 3: Sensitivity analysis
+    // Step 3: Upload processed video to Cloudinary
+    io.to(userId).emit("processing-progress", {
+      stage: "uploading-cloud",
+      progress: 0,
+    });
+
+    const cloudinaryResult = await uploadToCloudinary(outputPath, {
+      public_id: `pulse/videos/${path.parse(outputFileName).name}`,
+    });
+
+    video.streamUrl = cloudinaryResult.secure_url;
+    video.cloudinaryPublicId = cloudinaryResult.public_id;
+
+    // Clean up local files after successful upload
+    const originalPath = path.join(ORIGINALS_DIR, inputFileName);
+    fs.unlink(originalPath, () => {});
+    fs.unlink(outputPath, () => {});
+
+    io.to(userId).emit("processing-progress", {
+      stage: "upload-complete",
+      progress: 100,
+    });
+
+    // Step 4: Sensitivity analysis
     video.processingStatus = "analyzed";
     const sensitivityResult = await analyzeSensitivity(userId);
     video.sensitivityStatus = sensitivityResult;
 
-    // Step 4: Mark as ready
+    // Step 5: Mark as ready
     video.processingStatus = "ready";
     await video.save();
 

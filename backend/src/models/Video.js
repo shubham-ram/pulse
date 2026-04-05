@@ -24,6 +24,10 @@ const videoSchema = new mongoose.Schema(
       type: String,
       default: null,
     },
+    cloudinaryPublicId: {
+      type: String,
+      default: null,
+    },
     fileSize: {
       type: Number,
       required: true,

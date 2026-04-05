@@ -1,12 +1,4 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import Video from "../models/Video.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const UPLOADS_DIR = path.join(__dirname, "../../uploads");
 
 // GET /api/videos/:id/stream
 export const streamVideo = async (req, res) => {
@@ -31,54 +23,15 @@ export const streamVideo = async (req, res) => {
       });
     }
 
-    // Resolve the processed file on disk
-    // streamUrl is like /uploads/processed/processed_abc123.mp4
-    const filePath = path.join(
-      UPLOADS_DIR,
-      video.streamUrl.replace("/uploads", ""),
-    );
-
-    if (!fs.existsSync(filePath)) {
+    if (!video.streamUrl) {
       return res.status(404).json({
         success: false,
-        message: "Video file not found on disk",
+        message: "Video stream URL not available",
       });
     }
 
-    const stat = fs.statSync(filePath);
-    const fileSize = stat.size;
-    const range = req.headers.range;
-
-    if (range) {
-      // Parse Range header: "bytes=start-end"
-      const CHUNK_SIZE = 1 * 1024 * 1024; // 1MB
-      const parts = range.replace(/bytes=/, "").split("-");
-      const start = parseInt(parts[0], 10);
-      const end = parts[1]
-        ? parseInt(parts[1], 10)
-        : Math.min(start + CHUNK_SIZE - 1, fileSize - 1);
-      const chunkSize = end - start + 1;
-
-      const stream = fs.createReadStream(filePath, { start, end });
-
-      res.writeHead(206, {
-        "Content-Range": `bytes ${start}-${end}/${fileSize}`,
-        "Accept-Ranges": "bytes",
-        "Content-Length": chunkSize,
-        "Content-Type": "video/mp4",
-      });
-
-      stream.pipe(res);
-    } else {
-      // No Range header — send the entire file
-      res.writeHead(200, {
-        "Content-Length": fileSize,
-        "Content-Type": "video/mp4",
-        "Accept-Ranges": "bytes",
-      });
-
-      fs.createReadStream(filePath).pipe(res);
-    }
+    // Redirect to the Cloudinary URL for streaming
+    res.redirect(video.streamUrl);
   } catch (error) {
     res.status(500).json({
       success: false,

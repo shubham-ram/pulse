@@ -2,6 +2,7 @@ import Video from "../models/Video.js";
 import "../models/User.js";
 import "../models/Category.js";
 import { processVideo } from "../services/videoProcessor.js";
+import { deleteFromCloudinary } from "../services/cloudinaryService.js";
 
 // POST /api/videos/upload
 export const uploadVideo = async (req, res) => {
@@ -131,6 +132,13 @@ export const deleteVideo = async (req, res) => {
         success: false,
         message: "You can only delete your own videos",
       });
+    }
+
+    // Delete from Cloudinary if uploaded
+    if (video.cloudinaryPublicId) {
+      deleteFromCloudinary(video.cloudinaryPublicId).catch((err) =>
+        console.error("Cloudinary deletion failed:", err.message)
+      );
     }
 
     video.status = "inactive";
