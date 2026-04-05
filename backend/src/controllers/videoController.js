@@ -15,13 +15,6 @@ export const uploadVideo = async (req, res) => {
 
     const { title, description, categoryIds } = req.body;
 
-    if (!title) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide a video title",
-      });
-    }
-
     const video = await Video.create({
       title,
       description: description || "",

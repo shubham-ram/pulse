@@ -7,13 +7,6 @@ export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide name, email and password',
-      });
-    }
-
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({
@@ -53,13 +46,6 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide email and password',
-      });
-    }
 
     const user = await User.findOne({ email, status: 'active' }).select('+password');
 

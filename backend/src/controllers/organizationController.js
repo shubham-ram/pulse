@@ -6,13 +6,6 @@ export const createOrganization = async (req, res) => {
   try {
     const { name, description } = req.body;
 
-    if (!name) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide an organization name',
-      });
-    }
-
     // Check if user is already in an org
     if (req.user.organizationId) {
       return res.status(400).json({
@@ -61,13 +54,6 @@ export const createOrganization = async (req, res) => {
 export const joinOrganization = async (req, res) => {
   try {
     const { inviteCode } = req.body;
-
-    if (!inviteCode) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide an invite code',
-      });
-    }
 
     // Check if user is already in an org
     if (req.user.organizationId) {
@@ -168,13 +154,6 @@ export const updateMemberRole = async (req, res) => {
   try {
     const { id } = req.params;
     const { role } = req.body;
-
-    if (!role || !['admin', 'editor', 'viewer'].includes(role)) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide a valid role (admin, editor, viewer)',
-      });
-    }
 
     // Can't change your own role
     if (id === req.user._id.toString()) {

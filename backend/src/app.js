@@ -31,12 +31,66 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Pulse API is running' });
 });
 
+// 404 handler for unknown API routes
+app.use('/api/*', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
+  });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.statusCode || 500).json({
+  let statusCode = err.statusCode || 500;
+  let message = err.message || 'Internal Server Error';
+
+  // Mongoose validation error (e.g. required fields, enum mismatch)
+  if (err.name === 'ValidationError') {
+    statusCode = 400;
+    const messages = Object.values(err.errors).map((e) => e.message);
+    message = messages.join('. ');
+  }
+
+  // Mongoose duplicate key error (e.g. unique email)
+  if (err.code === 11000) {
+    statusCode = 409;
+    const field = Object.keys(err.keyValue).join(', ');
+    message = `Duplicate value for: ${field}`;
+  }
+
+  // Mongoose bad ObjectId
+  if (err.name === 'CastError') {
+    statusCode = 400;
+    message = `Invalid ${err.path}: ${err.value}`;
+  }
+
+  // JWT errors
+  if (err.name === 'JsonWebTokenError') {
+    statusCode = 401;
+    message = 'Invalid token';
+  }
+  if (err.name === 'TokenExpiredError') {
+    statusCode = 401;
+    message = 'Token expired';
+  }
+
+  // Multer file size / type errors
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    statusCode = 400;
+    message = 'File too large. Maximum size is 500MB';
+  }
+  if (err.message && err.message.startsWith('Invalid file type')) {
+    statusCode = 400;
+  }
+
+  // Log server errors for debugging
+  if (statusCode >= 500) {
+    console.error(err);
+  }
+
+  res.status(statusCode).json({
     success: false,
-    message: err.message || 'Internal Server Error',
+    message,
   });
 });
 
