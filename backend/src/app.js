@@ -35,7 +35,7 @@ app.use('/api/videos', videoRoutes);
 app.use('/api/categories', categoryRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', message: 'Pulse API is running' });
 });
 
@@ -48,7 +48,7 @@ app.use('/api', (req, res) => {
 });
 
 // Global error handler
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Internal Server Error';
 
@@ -85,7 +85,7 @@ app.use((err, req, res, next) => {
   // Multer file size / type errors
   if (err.code === 'LIMIT_FILE_SIZE') {
     statusCode = 400;
-    message = 'File too large. Maximum size is 500MB';
+    message = 'File too large. Maximum size is 50MB';
   }
   if (err.message && err.message.startsWith('Invalid file type')) {
     statusCode = 400;

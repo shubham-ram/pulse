@@ -362,7 +362,7 @@ Upload a video file. Triggers the processing pipeline in the background. **Requi
 
 | Field         | Type   | Required | Description                                      |
 | ------------- | ------ | -------- | ------------------------------------------------ |
-| `video`       | File   | Yes      | Video file (mp4, mkv, avi, webm, mov). Max 500MB |
+| `video`       | File   | Yes      | Video file (mp4, mkv, avi, webm, mov). Max 50MB |
 | `title`       | String | Yes      | Video title                                      |
 | `description` | String | No       | Video description                                |
 | `categoryIds` | String | No       | JSON array of category IDs                       |

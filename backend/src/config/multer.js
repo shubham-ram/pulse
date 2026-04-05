@@ -16,7 +16,7 @@ const ALLOWED_MIME_TYPES = [
   'video/quicktime',
 ];
 
-const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

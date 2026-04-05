@@ -71,7 +71,7 @@ The main dashboard shows all videos uploaded within your organization:
   - **Description** (optional) — add context about the video
   - **Video file** — drag and drop a file or click to browse
 - Supported formats: MP4, MKV, AVI, WebM, MOV
-- Maximum file size: 500MB
+- Maximum file size: 50MB
 - Click **Upload** to start
 
 ### Real-Time Processing Progress

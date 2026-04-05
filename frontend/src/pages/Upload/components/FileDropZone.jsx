@@ -10,7 +10,7 @@ const ACCEPTED_TYPES = [
   "video/quicktime",
   "video/x-msvideo",
 ];
-const MAX_SIZE = 500 * 1024 * 1024; // 500MB
+const MAX_SIZE = 50 * 1024 * 1024; // 50MB
 
 const formatSize = (bytes) => {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;

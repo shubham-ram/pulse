@@ -84,7 +84,7 @@ The app runs at `http://localhost:5173`. The Vite dev server automatically proxi
 
 ## Key Features
 
-- **Video Upload & Processing** — Upload videos (mp4, mkv, avi, webm, mov up to 500MB), auto-transcode to H.264 with FFmpeg
+- **Video Upload & Processing** — Upload videos (mp4, mkv, avi, webm, mov up to 50MB), auto-transcode to H.264 with FFmpeg
 - **Real-Time Progress** — Live transcoding and analysis progress via Socket.io
 - **Sensitivity Analysis** — Simulated content classification (safe/flagged) with progress tracking
 - **Video Streaming** — HTTP range request support for seeking and efficient playback
