@@ -9,6 +9,8 @@ import VideoPlayerArea from "./components/VideoPlayerArea";
 import VideoDetails from "./components/VideoDetails";
 import DeleteVideoDialog from "./components/DeleteVideoDialog";
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "";
+
 const VideoPlayerPage = () => {
   const { id } = useParams();
   const { user } = useAuth();
@@ -17,7 +19,7 @@ const VideoPlayerPage = () => {
 
   const streamUrl =
     video?.processingStatus === "ready"
-      ? `/api/videos/${id}/stream?token=${encodeURIComponent(localStorage.getItem("token") || "")}`
+      ? `${apiBaseUrl}/api/videos/${id}/stream?token=${encodeURIComponent(localStorage.getItem("token") || "")}`
       : null;
 
   const canDelete =
