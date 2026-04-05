@@ -5,17 +5,28 @@ import api from "@/services/api";
 import PageHeader from "@/components/layout/PageHeader";
 import VideoCard from "@/components/video/VideoCard";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectTrigger,
-  SelectValue,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { Upload, VideoOff, Video } from "lucide-react";
+import { Upload, Video } from "lucide-react";
 import StatCards from "./components/StatCards";
+import StatusFilter from "./components/StatusFilter";
+import SensitivityFilter from "./components/SensitivityFilter";
+
+const processingMap = {
+  "All statuses": "all",
+  Processing: "processing",
+  Analyzed: "analyzed",
+  Ready: "ready",
+  Failed: "failed",
+};
+
+const sensitivityMap = {
+  "All sensitivity": "all",
+  Pending: "pending",
+  Safe: "safe",
+  Flagged: "flagged",
+};
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -23,19 +34,24 @@ const DashboardPage = () => {
 
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [processingFilter, setProcessingFilter] = useState("all");
-  const [sensitivityFilter, setSensitivityFilter] = useState("all");
+  const [processingFilter, setProcessingFilter] = useState("All statuses");
+  const [sensitivityFilter, setSensitivityFilter] = useState("All sensitivity");
 
   const canUpload = user?.role === "admin" || user?.role === "editor";
 
   const fetchVideos = useCallback(async () => {
     setLoading(true);
     try {
+      const mappedProcessing = processingMap[processingFilter];
+      const mappedSensitivity = sensitivityMap[sensitivityFilter];
+
       const params = {};
-      if (processingFilter !== "all")
-        params.processingStatus = processingFilter;
-      if (sensitivityFilter !== "all")
-        params.sensitivityStatus = sensitivityFilter;
+      if (mappedProcessing && mappedProcessing !== "all") {
+        params.processingStatus = mappedProcessing;
+      }
+      if (mappedSensitivity && mappedSensitivity !== "all") {
+        params.sensitivityStatus = mappedSensitivity;
+      }
 
       const res = await api.get("/videos", { params });
       setVideos(res.data.data.videos);
@@ -68,31 +84,20 @@ const DashboardPage = () => {
       <StatCards videos={videos} />
 
       {/* Filters */}
-      <div className="mb-6 flex flex-wrap items-center gap-3">
-        <Select value={processingFilter} onValueChange={setProcessingFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Processing status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All statuses</SelectItem>
-            <SelectItem value="processing">Processing</SelectItem>
-            <SelectItem value="analyzed">Analyzed</SelectItem>
-            <SelectItem value="ready">Ready</SelectItem>
-            <SelectItem value="failed">Failed</SelectItem>
-          </SelectContent>
-        </Select>
+      <div className="mb-6 flex flex-wrap items-center gap-6 rounded-lg bg-muted/40 p-3 px-4 border">
+        <div className="flex items-center gap-3">
+          <StatusFilter
+            processingFilter={processingFilter}
+            setProcessingFilter={setProcessingFilter}
+          />
+        </div>
 
-        <Select value={sensitivityFilter} onValueChange={setSensitivityFilter}>
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Sensitivity" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All sensitivity</SelectItem>
-            <SelectItem value="pending">Pending</SelectItem>
-            <SelectItem value="safe">Safe</SelectItem>
-            <SelectItem value="flagged">Flagged</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="flex items-center gap-3">
+          <SensitivityFilter
+            sensitivityFilter={sensitivityFilter}
+            setSensitivityFilter={setSensitivityFilter}
+          />
+        </div>
       </div>
 
       {/* Video Grid */}
@@ -113,15 +118,16 @@ const DashboardPage = () => {
           </div>
           <h3 className="text-xl font-semibold">No videos found</h3>
           <p className="max-w-md mt-2 text-sm text-muted-foreground">
-            {processingFilter !== "all" || sensitivityFilter !== "all"
+            {processingFilter !== "All statuses" ||
+            sensitivityFilter !== "All sensitivity"
               ? "We couldn't find any videos matching your current filter criteria. Try clearing them to see all videos."
               : canUpload
                 ? "Start building your organization's video library by uploading your first piece of content."
                 : "Your organization hasn't uploaded any videos yet."}
           </p>
           {canUpload &&
-            processingFilter === "all" &&
-            sensitivityFilter === "all" && (
+            processingFilter === "All statuses" &&
+            sensitivityFilter === "All sensitivity" && (
               <Button
                 size="lg"
                 className="mt-8 gap-2 font-medium"
