@@ -31,8 +31,10 @@ const DashboardPage = () => {
     setLoading(true);
     try {
       const params = {};
-      if (processingFilter !== "all") params.processingStatus = processingFilter;
-      if (sensitivityFilter !== "all") params.sensitivityStatus = sensitivityFilter;
+      if (processingFilter !== "all")
+        params.processingStatus = processingFilter;
+      if (sensitivityFilter !== "all")
+        params.sensitivityStatus = sensitivityFilter;
 
       const res = await api.get("/videos", { params });
       setVideos(res.data.data.videos);
@@ -49,7 +51,10 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <PageHeader title="Video Library" description="Browse and manage your organization's videos">
+      <PageHeader
+        title="Video Library"
+        description="Browse and manage your organization's videos"
+      >
         {canUpload && (
           <Button onClick={() => navigate("/upload")} className="gap-2">
             <Upload className="h-4 w-4" />
@@ -108,16 +113,18 @@ const DashboardPage = () => {
                 ? "Upload your first video to get started"
                 : "No videos have been uploaded yet"}
           </p>
-          {canUpload && processingFilter === "all" && sensitivityFilter === "all" && (
-            <Button
-              variant="outline"
-              className="mt-4 gap-2"
-              onClick={() => navigate("/upload")}
-            >
-              <Upload className="h-4 w-4" />
-              Upload Video
-            </Button>
-          )}
+          {canUpload &&
+            processingFilter === "all" &&
+            sensitivityFilter === "all" && (
+              <Button
+                variant="outline"
+                className="mt-4 gap-2"
+                onClick={() => navigate("/upload")}
+              >
+                <Upload className="h-4 w-4" />
+                Upload Video
+              </Button>
+            )}
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
