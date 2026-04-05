@@ -8,7 +8,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Users } from "lucide-react";
-import getField from "@/form/Controller/getField";
+import getField from "@/form/getField";
 import useJoinOrgForm from "../hooks/useJoinOrgForm";
 import joinOrgControls from "../config/joinOrgControls";
 

@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/progress";
 import { Upload } from "lucide-react";
 import { toast } from "sonner";
-import getField from "@/form/Controller/getField";
+import getField from "@/form/getField";
 import useUploadForm from "./hooks/useUploadForm";
 import useVideoProcessing from "./hooks/useVideoProcessing";
 import uploadControls from "./config/controls";

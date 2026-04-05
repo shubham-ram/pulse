@@ -8,7 +8,7 @@ import {
   CardContent,
 } from "@/components/ui/card";
 import { Building2 } from "lucide-react";
-import getField from "@/form/Controller/getField";
+import getField from "@/form/getField";
 import useCreateOrgForm from "../hooks/useCreateOrgForm";
 import createOrgControls from "../config/createOrgControls";
 

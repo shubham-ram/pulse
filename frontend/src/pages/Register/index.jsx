@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 import ThemeToggle from "@/components/layout/ThemeToggle";
-import getField from "@/form/Controller/getField";
+import getField from "@/form/getField";
 import useRegisterForm from "@/pages/Register/hooks/useRegisterForm";
 import registerControls from "./config/controls";
 
