@@ -13,6 +13,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { toast } from "sonner";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -42,6 +43,9 @@ const LoginPage = () => {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <div className="fixed top-4 right-4">
+        <ThemeToggle />
+      </div>
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl">Welcome back</CardTitle>
