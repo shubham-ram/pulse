@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
+import { Activity } from "lucide-react";
 import {
   Card,
   CardHeader,
@@ -10,6 +11,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+
 import { toast } from "sonner";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import getField from "@/form/getField";
@@ -36,13 +38,23 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="fixed top-4 right-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 relative">
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 font-bold text-2xl">
+        <div className="flex bg-primary text-primary-foreground items-center justify-center rounded-lg p-1.5 shadow-sm">
+          <Activity className="h-6 w-6" />
+        </div>
+        Pulse
+      </div>
+
+      <div className="absolute top-4 right-4 md:top-8 md:right-8">
         <ThemeToggle />
       </div>
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">Create an account</CardTitle>
+
+      <Card className="w-full max-w-sm">
+        <CardHeader className="text-center">
+          <CardTitle className="text-2xl font-semibold tracking-tight">
+            Create an account
+          </CardTitle>
           <CardDescription>Get started with Pulse</CardDescription>
         </CardHeader>
         <CardContent>
@@ -66,19 +78,18 @@ const RegisterPage = () => {
               type="submit"
               size="lg"
               disabled={submitting}
-              className="mt-2"
+              className="mt-2 text-base font-medium cursor-pointer"
             >
               {submitting ? "Creating account..." : "Sign up"}
             </Button>
           </form>
         </CardContent>
-
         <CardFooter className="justify-center">
           <p className="text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link
               to="/login"
-              className="text-primary underline underline-offset-4"
+              className="font-semibold text-primary hover:text-primary/80 transition-colors underline-offset-4 hover:underline"
             >
               Sign in
             </Link>

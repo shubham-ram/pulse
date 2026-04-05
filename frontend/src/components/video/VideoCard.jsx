@@ -71,48 +71,48 @@ const VideoCard = ({ video }) => {
 
   return (
     <Card
-      className="cursor-pointer transition-shadow hover:shadow-md"
+      className="group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-border/50 dark:hover:shadow-primary/10"
       onClick={() => navigate(`/videos/${video._id}`)}
     >
       {/* Thumbnail placeholder */}
-      <div className="flex h-36 items-center justify-center rounded-t-lg bg-muted">
-        <Video className="h-10 w-10 text-muted-foreground/50" />
+      <div className="flex h-40 items-center justify-center bg-gradient-to-br from-indigo-500/5 to-purple-500/5 transition-colors group-hover:from-indigo-500/10 group-hover:to-purple-500/10 dark:from-indigo-500/10 dark:to-purple-500/10">
+        <Video className="h-10 w-10 text-muted-foreground/40 transition-transform duration-300 group-hover:scale-110 group-hover:text-primary/60" />
       </div>
 
-      <CardHeader className="pb-2">
-        <CardTitle className="line-clamp-1 text-base">{video.title}</CardTitle>
+      <CardHeader className="p-4 pb-2">
+        <CardTitle className="line-clamp-1 text-base transition-colors group-hover:text-primary">{video.title}</CardTitle>
         {video.description && (
-          <CardDescription className="line-clamp-2">
+          <CardDescription className="line-clamp-2 mt-1">
             {video.description}
           </CardDescription>
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-3 p-4 pt-0">
         {/* Badges */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           <Badge
-            variant="outline"
-            className={cn("border-0", processing.className)}
+            variant="secondary"
+            className={cn("border-0 shadow-none font-medium", processing.className)}
           >
             {processing.label}
           </Badge>
           <Badge
-            variant="outline"
-            className={cn("border-0", sensitivity.className)}
+            variant="secondary"
+            className={cn("border-0 shadow-none font-medium", sensitivity.className)}
           >
             {sensitivity.label}
           </Badge>
         </div>
 
         {/* Meta */}
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <User className="h-3 w-3" />
+        <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
+          <span className="flex items-center gap-1.5 font-medium">
+            <User className="h-3.5 w-3.5" />
             {video.uploadedBy?.name || "Unknown"}
           </span>
-          <span className="flex items-center gap-1">
-            <Clock className="h-3 w-3" />
+          <span className="flex items-center gap-1.5 opacity-75">
+            <Clock className="h-3.5 w-3.5" />
             {formatDate(video.createdAt)}
           </span>
         </div>

@@ -14,7 +14,8 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { Upload, VideoOff } from "lucide-react";
+import { Upload, VideoOff, Video } from "lucide-react";
+import StatCards from "./components/StatCards";
 
 const DashboardPage = () => {
   const { user } = useAuth();
@@ -63,10 +64,13 @@ const DashboardPage = () => {
         )}
       </PageHeader>
 
+      {/* Stat Cards */}
+      <StatCards videos={videos} />
+
       {/* Filters */}
       <div className="mb-6 flex flex-wrap items-center gap-3">
         <Select value={processingFilter} onValueChange={setProcessingFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Processing status" />
           </SelectTrigger>
           <SelectContent>
@@ -79,7 +83,7 @@ const DashboardPage = () => {
         </Select>
 
         <Select value={sensitivityFilter} onValueChange={setSensitivityFilter}>
-          <SelectTrigger>
+          <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="Sensitivity" />
           </SelectTrigger>
           <SelectContent>
@@ -103,22 +107,24 @@ const DashboardPage = () => {
           ))}
         </div>
       ) : videos.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed py-16">
-          <VideoOff className="mb-3 h-10 w-10 text-muted-foreground/50" />
-          <p className="text-lg font-medium">No videos found</p>
-          <p className="mt-1 text-sm text-muted-foreground">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed bg-muted/30 py-20 px-4 text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-primary/10 transition-transform duration-500 hover:scale-110">
+            <Video className="h-10 w-10 text-primary" />
+          </div>
+          <h3 className="text-xl font-semibold">No videos found</h3>
+          <p className="max-w-md mt-2 text-sm text-muted-foreground">
             {processingFilter !== "all" || sensitivityFilter !== "all"
-              ? "Try adjusting your filters"
+              ? "We couldn't find any videos matching your current filter criteria. Try clearing them to see all videos."
               : canUpload
-                ? "Upload your first video to get started"
-                : "No videos have been uploaded yet"}
+                ? "Start building your organization's video library by uploading your first piece of content."
+                : "Your organization hasn't uploaded any videos yet."}
           </p>
           {canUpload &&
             processingFilter === "all" &&
             sensitivityFilter === "all" && (
               <Button
-                variant="outline"
-                className="mt-4 gap-2"
+                size="lg"
+                className="mt-8 gap-2 font-medium"
                 onClick={() => navigate("/upload")}
               >
                 <Upload className="h-4 w-4" />

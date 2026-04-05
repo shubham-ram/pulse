@@ -4,7 +4,7 @@ import api from "@/services/api";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { LogOut } from "lucide-react";
+import { LogOut, Activity } from "lucide-react";
 import ThemeToggle from "@/components/layout/ThemeToggle";
 import CreateOrgCard from "./components/CreateOrgCard";
 import JoinOrgCard from "./components/JoinOrgCard";
@@ -50,11 +50,19 @@ const OrganizationPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4">
-      <div className="fixed top-4 right-4">
+    <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 relative">
+      <div className="absolute top-4 left-4 md:top-8 md:left-8 flex items-center gap-2 font-bold text-2xl">
+        <div className="flex bg-primary text-primary-foreground items-center justify-center rounded-lg p-1.5 shadow-sm">
+          <Activity className="h-6 w-6" />
+        </div>
+        Pulse
+      </div>
+
+      <div className="absolute top-4 right-4 md:top-8 md:right-8">
         <ThemeToggle />
       </div>
-      <div className="mb-8 text-center">
+
+      <div className="mb-8 text-center mt-8">
         <h1 className="text-3xl font-bold tracking-tight">Get Started</h1>
         <p className="mt-1 text-muted-foreground">
           Create a new organization or join an existing one

@@ -20,8 +20,8 @@ const ThemeToggle = () => {
           variant="ghost"
           size="sm"
           className={cn(
-            "h-7 flex-1 gap-1.5 px-2 text-xs",
-            theme === value && "bg-background shadow-sm"
+            "h-7 flex-1 gap-1.5 px-2 text-xs cursor-pointer",
+            theme === value && "bg-background shadow-sm",
           )}
           onClick={() => setTheme(value)}
           title={label}

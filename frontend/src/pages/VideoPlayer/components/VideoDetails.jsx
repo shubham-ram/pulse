@@ -45,9 +45,9 @@ const VideoDetails = ({ video }) => {
         )}
 
         {video.categoryIds?.length > 0 && (
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {video.categoryIds.map((cat) => (
-              <Badge key={cat._id} variant="secondary">
+              <Badge key={cat._id} variant="secondary" className="hover:bg-secondary/80 transition-colors cursor-default">
                 {cat.name}
               </Badge>
             ))}
@@ -56,8 +56,8 @@ const VideoDetails = ({ video }) => {
       </div>
 
       {/* Right: details */}
-      <div className="rounded-lg border p-4">
-        <h3 className="mb-3 text-sm font-semibold">Details</h3>
+      <div className="h-fit rounded-xl border bg-card text-card-foreground shadow-sm p-6">
+        <h3 className="mb-4 text-base font-semibold tracking-tight">Metadata</h3>
         <div className="flex flex-col gap-3 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <User className="h-4 w-4" />
@@ -85,7 +85,7 @@ const VideoDetails = ({ video }) => {
             <Badge
               variant="outline"
               className={cn(
-                "border-0",
+                "border-0 shadow-none font-medium ml-auto",
                 isSafe &&
                   "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
                 isFlagged &&

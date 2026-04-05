@@ -72,7 +72,10 @@ const MembersTable = ({
             {members.map((member) => {
               const isSelf = member._id === currentUserId;
               return (
-                <TableRow key={member._id}>
+                <TableRow
+                  key={member._id}
+                  className="group transition-colors hover:bg-muted/30"
+                >
                   <TableCell className="font-medium">
                     {member.name}
                     {isSelf && (

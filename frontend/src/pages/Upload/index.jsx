@@ -99,7 +99,7 @@ const UploadPage = () => {
         description="Upload a video for processing and analysis"
       />
 
-      <Card className="mx-auto max-w-lg">
+      <Card className="mx-auto max-w-2xl shadow-sm border-border/50">
         <CardHeader>
           <CardTitle>Video Details</CardTitle>
           <CardDescription>
