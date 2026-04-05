@@ -33,7 +33,10 @@ export const streamVideo = async (req, res) => {
 
     // Resolve the processed file on disk
     // streamUrl is like /uploads/processed/processed_abc123.mp4
-    const filePath = path.join(UPLOADS_DIR, video.streamUrl.replace("/uploads", ""));
+    const filePath = path.join(
+      UPLOADS_DIR,
+      video.streamUrl.replace("/uploads", ""),
+    );
 
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({
@@ -48,9 +51,12 @@ export const streamVideo = async (req, res) => {
 
     if (range) {
       // Parse Range header: "bytes=start-end"
+      const CHUNK_SIZE = 1 * 1024 * 1024; // 1MB
       const parts = range.replace(/bytes=/, "").split("-");
       const start = parseInt(parts[0], 10);
-      const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+      const end = parts[1]
+        ? parseInt(parts[1], 10)
+        : Math.min(start + CHUNK_SIZE - 1, fileSize - 1);
       const chunkSize = end - start + 1;
 
       const stream = fs.createReadStream(filePath, { start, end });
