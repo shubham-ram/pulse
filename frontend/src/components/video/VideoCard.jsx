@@ -11,17 +11,47 @@ import { cn } from "@/lib/utils";
 import { Video, Clock, User } from "lucide-react";
 
 const processingConfig = {
-  uploading: { label: "Uploading", className: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" },
-  processing: { label: "Processing", className: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400" },
-  analyzed: { label: "Analyzed", className: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400" },
-  ready: { label: "Ready", className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
-  failed: { label: "Failed", className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" },
+  uploading: {
+    label: "Uploading",
+    className:
+      "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
+  },
+  processing: {
+    label: "Processing",
+    className:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+  },
+  analyzed: {
+    label: "Analyzed",
+    className:
+      "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-400",
+  },
+  ready: {
+    label: "Ready",
+    className:
+      "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  },
+  failed: {
+    label: "Failed",
+    className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  },
 };
 
 const sensitivityConfig = {
-  pending: { label: "Pending", className: "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400" },
-  safe: { label: "Safe", className: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" },
-  flagged: { label: "Flagged", className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400" },
+  pending: {
+    label: "Pending",
+    className:
+      "bg-gray-100 text-gray-700 dark:bg-gray-900/30 dark:text-gray-400",
+  },
+  safe: {
+    label: "Safe",
+    className:
+      "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
+  },
+  flagged: {
+    label: "Flagged",
+    className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  },
 };
 
 const formatDate = (dateStr) => {
@@ -34,8 +64,10 @@ const formatDate = (dateStr) => {
 
 const VideoCard = ({ video }) => {
   const navigate = useNavigate();
-  const processing = processingConfig[video.processingStatus] || processingConfig.processing;
-  const sensitivity = sensitivityConfig[video.sensitivityStatus] || sensitivityConfig.pending;
+  const processing =
+    processingConfig[video.processingStatus] || processingConfig.processing;
+  const sensitivity =
+    sensitivityConfig[video.sensitivityStatus] || sensitivityConfig.pending;
 
   return (
     <Card
@@ -59,10 +91,16 @@ const VideoCard = ({ video }) => {
       <CardContent className="flex flex-col gap-3">
         {/* Badges */}
         <div className="flex flex-wrap gap-1.5">
-          <Badge variant="outline" className={cn("border-0", processing.className)}>
+          <Badge
+            variant="outline"
+            className={cn("border-0", processing.className)}
+          >
             {processing.label}
           </Badge>
-          <Badge variant="outline" className={cn("border-0", sensitivity.className)}>
+          <Badge
+            variant="outline"
+            className={cn("border-0", sensitivity.className)}
+          >
             {sensitivity.label}
           </Badge>
         </div>
