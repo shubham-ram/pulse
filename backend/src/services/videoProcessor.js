@@ -23,10 +23,14 @@ const transcodeVideo = (inputFileName, outputFileName, userId) => {
 
     ffmpeg(inputPath)
       .outputOptions([
+        "-vf scale=640:-1",
+        "-r 24",
+        "-threads 1",
         "-codec:v libx264",
-        "-preset fast",
-        "-crf 23",
+        "-preset veryfast",
+        "-crf 28",
         "-codec:a aac",
+        "-b:a 96k",
         "-movflags +faststart", // enables streaming before full download
       ])
       .output(outputPath)
@@ -124,7 +128,7 @@ export const processVideo = async (videoId, userId) => {
     const outputPath = await transcodeVideo(
       inputFileName,
       outputFileName,
-      userId
+      userId,
     );
 
     // Step 2: Extract duration
