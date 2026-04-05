@@ -60,7 +60,12 @@ const VideoPlayerPage = () => {
   const [video, setVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false);
-  const [blobUrl, setBlobUrl] = useState(null);
+
+  // Build a direct stream URL with token for native browser range requests
+  const streamUrl =
+    video?.processingStatus === "ready"
+      ? `/api/videos/${id}/stream?token=${encodeURIComponent(localStorage.getItem("token") || "")}`
+      : null;
 
   useEffect(() => {
     const fetchVideo = async () => {
@@ -76,30 +81,6 @@ const VideoPlayerPage = () => {
     };
     fetchVideo();
   }, [id, navigate]);
-
-  // Fetch video stream as blob (JWT auth required)
-  useEffect(() => {
-    if (!video || video.processingStatus !== "ready") return;
-
-    let revoked = false;
-    const fetchStream = async () => {
-      try {
-        const res = await api.get(`/videos/${id}/stream`, { responseType: "blob" });
-        if (!revoked) {
-          const url = URL.createObjectURL(res.data);
-          setBlobUrl(url);
-        }
-      } catch {
-        // Stream not available — silently fail, user sees status
-      }
-    };
-    fetchStream();
-
-    return () => {
-      revoked = true;
-      if (blobUrl) URL.revokeObjectURL(blobUrl);
-    };
-  }, [video, id]);
 
   const canDelete =
     user?.role === "admin" ||
@@ -173,14 +154,14 @@ const VideoPlayerPage = () => {
 
       {/* Video Player */}
       <div className="mb-6 overflow-hidden rounded-lg bg-black">
-        {isReady && blobUrl ? (
+        {isReady && streamUrl ? (
           <video
             className="aspect-video w-full"
-            src={blobUrl}
+            src={streamUrl}
             controls
             controlsList="nodownload"
           />
-        ) : isReady && !blobUrl ? (
+        ) : isReady && !streamUrl ? (
           <div className="flex aspect-video items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-white/50" />
           </div>
